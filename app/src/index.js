@@ -49,14 +49,15 @@ class Game extends React.Component{
             history: [{
                 squares : Array(9).fill(null),
             }],
+            stepCount : 0,
             isxNext : true,
         };
     }
 
     handleClick(i)
     {
-        const history = this.state.history;
-        const current = history[history.length - 1];
+        const reqdHistory = this.state.history.slice(0 , this.state.stepCount + 1);
+        const current = reqdHistory[reqdHistory.length - 1];
         const updSquares = current.squares.slice();
         if (findWinner(updSquares) || updSquares[i]) 
         {
@@ -64,21 +65,30 @@ class Game extends React.Component{
         }
         updSquares[i] = this.state.isxNext ? 'x' : 'o';
         this.setState({ 
-                        history : history.concat( [ { squares : updSquares, } ] ), 
-                        isxNext : !this.state.isxNext 
+                        history : reqdHistory.concat( [ { squares : updSquares, } ] ), 
+                        stepCount : reqdHistory.length,
+                        isxNext : !this.state.isxNext, 
                       });
+    }
+
+    jump(step)
+    {
+        this.setState({
+            stepCount : step,
+            isxNext : (step % 2)===0, 
+        });
     }
 
     render()
     {
         const history = this.state.history;
-        const current = history[history.length-1];
+        const current = history[this.state.stepCount];
         const winner = findWinner(current.squares);
 
         const trackMoves = history.map((step,move) => {
             const output = move ? "Go to move #"+ move : "Restart Game";
             return (
-                <li>
+                <li key={move}>
                     <button onClick={ () => this.jump(move) }> {output} </button>
                 </li>
             ) 
