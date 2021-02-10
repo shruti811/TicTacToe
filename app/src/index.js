@@ -65,7 +65,7 @@ class Game extends React.Component{
         }
         updSquares[i] = this.state.isxNext ? 'x' : 'o';
         this.setState({ 
-                        history : reqdHistory.concat( [ { squares : updSquares, } ] ), 
+                        history : reqdHistory.concat( [ { squares : updSquares, lastMove : i } ] ), 
                         stepCount : reqdHistory.length,
                         isxNext : !this.state.isxNext, 
                       });
@@ -86,7 +86,10 @@ class Game extends React.Component{
         const winner = findWinner(current.squares);
 
         const trackMoves = history.map((step,move) => {
-            const output = move ? "Go to move #"+ move : "Restart Game";
+            const lastSquare = step.lastMove;
+            const row = 1 + Math.floor(lastSquare/3);
+            const col = 1 + (lastSquare % 3);  
+            const output = move ? "Go to move #"+ move + " => [" + row + "," + col + "]" : "Restart Game";
             return (
                 <li key={move}>
                     <button onClick={ () => this.jump(move) }> {output} </button>
