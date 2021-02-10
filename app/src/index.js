@@ -92,7 +92,7 @@ class Game extends React.Component{
             const output = move ? "Go to move #"+ move + " => [" + row + "," + col + "]" : "Restart Game";
             return (
                 <li key={move}>
-                    <button onClick={ () => this.jump(move) }> {output} </button>
+                    <button className={move === this.state.stepCount ? 'move-list' : ''} onClick={ () => this.jump(move) }> {output} </button>
                 </li>
             ) 
         });
