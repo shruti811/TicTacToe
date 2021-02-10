@@ -48,6 +48,7 @@ class Game extends React.Component{
             }],
             stepCount : 0,
             isxNext : true,
+            isAscending : true,
         };
     }
 
@@ -76,6 +77,13 @@ class Game extends React.Component{
         });
     }
 
+    handleToggleClick()
+    {
+        this.setState({
+            isAscending : !this.state.isAscending,
+        });
+    }
+
     render()
     {
         const history = this.state.history;
@@ -87,13 +95,23 @@ class Game extends React.Component{
             const row = 1 + Math.floor(lastSquare/3);
             const col = 1 + (lastSquare % 3);  
             const output = move ? "Go to move #"+ move + " => [" + row + "," + col + "]" : "Restart Game";
+
             return (
                 <li key={move}>
-                    <button className={move === this.state.stepCount ? 'move-list' : ''} onClick={ () => this.jump(move) }> {output} </button>
+                    <button 
+                      className={move === this.state.stepCount ? 'move-list' : ''} 
+                      onClick={ () => this.jump(move) 
+                    }> 
+                      {output} 
+                    </button>
                 </li>
             ) 
         });
 
+        if(!this.state.isAscending)
+        {
+            trackMoves.reverse();
+        }
         let statement;
         if (winner) 
         {
@@ -111,6 +129,9 @@ class Game extends React.Component{
                 </div>
                 <div className="info">
                     <div>{statement}</div>
+                    <button onClick={() => this.handleToggleClick()}>
+                        {this.state.isAscending ? 'Descending': 'Ascending'}
+                    </button>
                     <ol>{trackMoves}</ol>
                 </div>
             </div>
