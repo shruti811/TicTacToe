@@ -122,7 +122,11 @@ class Game extends React.Component{
         {
             statement = 'Winner: ' + winner;
         }
-        else 
+        else if(this.state.stepCount === 9)
+        {
+            statement = "It's a Draw !!";
+        }
+        else
         {
             statement = "Next Player: " + (this.state.isxNext ? 'x' : 'o');   
         }
